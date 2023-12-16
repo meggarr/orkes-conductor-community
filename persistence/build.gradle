@@ -18,11 +18,11 @@ dependencies {
     implementation "org.rarefiedredis.redis:redis-java:${versions.revRarefiedRedis}"
 
     //In memory
-    implementation "com.jayway.jsonpath:json-path:2.4.0"
+    implementation "com.jayway.jsonpath:json-path:${versions.revJsonPath}"
 
 
     //Micrometer
-    implementation "io.micrometer:micrometer-core:1.7.5"
+    implementation "io.micrometer:micrometer-core:${versions.revMicrometer}"
 
     //spring
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

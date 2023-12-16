@@ -13,8 +13,8 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-core"
 
     //Metrics
-    implementation "io.micrometer:micrometer-registry-prometheus:1.7.5"
-    implementation "io.micrometer:micrometer-core:1.7.5"
+    implementation "io.micrometer:micrometer-registry-prometheus:${versions.revMicrometer}"
+    implementation "io.micrometer:micrometer-core:${versions.revMicrometer}"
     implementation "com.netflix.spectator:spectator-reg-micrometer:${versions.revSpectator}"
     implementation "com.netflix.spectator:spectator-reg-metrics3:${versions.revSpectator}"
     implementation "com.netflix.spectator:spectator-api:${versions.revSpectator}"
