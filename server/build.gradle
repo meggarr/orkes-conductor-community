@@ -8,8 +8,10 @@ dependencies {
 
     implementation "com.netflix.conductor:conductor-common:${versions.revConductor}"
     implementation "com.netflix.conductor:conductor-core:${versions.revConductor}"
+    implementation "com.netflix.conductor:conductor-common-persistence:${versions.revConductor}"
+    implementation "com.netflix.conductor:conductor-postgres-persistence:${versions.revConductor}"
     implementation "com.netflix.conductor:conductor-redis-lock:${versions.revConductor}"
-    implementation "com.netflix.conductor:conductor-grpc:${versions.revConductor}"
+    //implementation "com.netflix.conductor:conductor-grpc:${versions.revConductor}"
     implementation "com.netflix.conductor:conductor-rest:${versions.revConductor}"
     implementation "com.netflix.conductor:conductor-redis-concurrency-limit:${versions.revConductor}"
 
@@ -17,14 +19,14 @@ dependencies {
     implementation "com.netflix.conductor:conductor-awss3-storage:${versions.revConductor}"
     implementation "com.netflix.conductor:conductor-awssqs-event-queue:${versions.revConductor}"
     implementation "com.netflix.conductor:conductor-json-jq-task:${versions.revConductor}"
-    implementation "com.netflix.conductor:conductor-amqp:${versions.revConductor}"
-    implementation "com.netflix.conductor:conductor-nats:${versions.revConductor}"
+    //implementation "com.netflix.conductor:conductor-amqp:${versions.revConductor}"
+    //implementation "com.netflix.conductor:conductor-nats:${versions.revConductor}"
     implementation "com.netflix.conductor:conductor-kafka:${versions.revConductor}"
     implementation "com.netflix.conductor:conductor-metrics:${versions.revConductor}"
 
     implementation "io.orkes.queues:orkes-conductor-queues:${versions.revOrkesQueues}"
-    implementation project(":orkes-conductor-archive")
-    implementation project(":orkes-conductor-persistence")
+    //implementation project(":orkes-conductor-archive")
+    //implementation project(":orkes-conductor-persistence")
 
     implementation "io.orkes.conductor:orkes-conductor-common-protos:${versions.revOrkesProtos}"
 
@@ -33,33 +35,37 @@ dependencies {
     //Cache
     implementation "com.google.guava:guava:${versions.revGuava}"
 
-
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.retry:spring-retry'
+
+    //Redis-Lock
+    implementation "org.redisson:redisson:${versions.revRedisson}"
 
     //protobuf
     implementation "com.google.protobuf:protobuf-java:${versions.revProtoBuf}"
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-    runtimeOnly 'com.netflix.spectator:spectator-reg-micrometer'
-    implementation "io.micrometer:micrometer-registry-prometheus:1.7.5"
-    implementation "io.micrometer:micrometer-core:1.8.0"
+    //Metrics
+    implementation "io.micrometer:micrometer-registry-prometheus:${versions.revMicrometer}"
+    implementation "io.micrometer:micrometer-core:${versions.revMicrometer}"
+    implementation "com.netflix.spectator:spectator-reg-micrometer:${versions.revSpectator}"
+    implementation "com.netflix.spectator:spectator-reg-metrics3:${versions.revSpectator}"
+    implementation "com.netflix.spectator:spectator-api:${versions.revSpectator}"
 
     implementation "com.jayway.jsonpath:json-path:${versions.revJsonPath}"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.hamcrest:hamcrest'
     testImplementation "org.awaitility:awaitility:3.1.6"
     testImplementation 'net.java.dev.jna:jna-platform:5.8.0' //M1 fix for testcontainers
-    testImplementation 'com.jayway.jsonpath:json-path-assert:2.6.0'
+    testImplementation "com.jayway.jsonpath:json-path-assert:${versions.revJsonPath}"
     testImplementation "org.testcontainers:postgresql:${versions.revTestContainer}"
-    testImplementation "org.testcontainers:kafka:1.17.1"
+    testImplementation "org.testcontainers:kafka:${versions.revTestContainer}"
 }
 
 test {

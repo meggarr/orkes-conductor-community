@@ -1,30 +1,34 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
 buildscript {
     dependencies {
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:2.5.15"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:2.7.16"
         classpath 'com.diffplug.spotless:spotless-plugin-gradle:6.+'
     }
 }
 
 plugins {
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'io.spring.dependency-management' version '1.1.3'
 }
 
 ext {
     group = 'io.orkes.conductor'
-    appVersion = '0.0.1-SNAPSHOT'
-    springBootVersion = '2.7.6'
+    appVersion = 'v3.15.0-calx1'
+    springBootVersion = '2.7.16'
 
     versions = [
             revConductor            : '3.15.0',
-            revTestContainer        : '1.17.2',
-            revGuava                : '32.0.0-jre',
-            revLog4j                : '2.17.1',
+            revTestContainer        : '1.19.1',
+            revGuava                : '32.1.2-jre',
+            revLog4j                : '2.17.2',
             revJedis                : '3.8.0',
+            revRedisson             : '3.18.1',
             revMockServerClient     : '5.12.0',
             revCommonsLang          : '3.12.0',
-            revLombok               : '1.18.24',
+            revLombok               : '1.18.30',
             revLucene               : '7.7.3',
-            revSpectator            : '0.122.0',
+            revSpectator            : '1.6.11',
+            revMicrometer           : '1.11.7',
             revJsonPath             : '2.8.0',
             revOpenapi              : '1.7.+',
             revAwsSdk               : '1.12.549',
@@ -60,6 +64,9 @@ subprojects {
 
     java {
         withSourcesJar()
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
     }
 
     configurations {
@@ -120,7 +127,7 @@ subprojects {
 
     dependencyManagement {
         imports {
-            mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
+            mavenBom(SpringBootPlugin.BOM_COORDINATES)
         }
     }
 
@@ -131,12 +138,6 @@ subprojects {
             exceptionFormat = "full"
             showStandardStreams = false
         }
-    }
-
-
-    compileJava {
-        sourceCompatibility = 17
-        targetCompatibility = 17
     }
 
     spotless {

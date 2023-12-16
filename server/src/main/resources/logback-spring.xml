@@ -5,12 +5,12 @@
               class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
             <Pattern>
-                %black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): %msg%n%throwable
+                %white(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): %msg%n%throwable
             </Pattern>
         </layout>
     </appender>
-    <property name="LOG_FILE" value="${LOG_FILE:-server.log}" />
 
+    <property name="LOG_FILE" value="${LOG_FILE:-server.log}" />
     <appender name="FileAppender"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_FILE}</file>
@@ -24,9 +24,11 @@
             <totalSizeCap>10GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{ISO8601} %-5level [%t]: %msg%n%throwable</pattern>
+            <pattern>%d{ISO8601} %-5level [%t] %logger{0}: %msg%n%throwable</pattern>
         </encoder>
     </appender>
+
+    <logger name="io.orkes.conductor" level="debug"/>
 
     <root level="info">
         <appender-ref ref="Console" />

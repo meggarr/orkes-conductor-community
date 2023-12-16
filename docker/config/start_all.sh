@@ -10,6 +10,6 @@ chmod 0700 /pgdata
 su postgres -c 'initdb -D /pgdata'
 su postgres -c 'pg_ctl start -D /pgdata'
 
-cat /app/config/banner.txt
+#cat /app/config/banner.txt
 nohup /app/startup.sh &
 tail -f /app/logs/server.log
