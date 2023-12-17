@@ -23,13 +23,16 @@ WORKDIR conductor-community
 RUN ./gradlew clean build -x test
 
 WORKDIR /
-RUN git clone https://github.com/Netflix/conductor
+RUN git clone https://github.com/Netflix/conductor -b v3.15.0 --depth=1
 WORKDIR conductor/ui
 RUN yarn config set network-timeout 600000 -g
-RUN yarn install && yarn build
+# Include monaco sources into bundle (instead of using CDN)
+ENV REACT_APP_MONACO_EDITOR_USING_CDN=false
+RUN yarn install && cp -r node_modules/monaco-editor public/ && yarn build
 RUN ls -ltr
 RUN echo "Done building UI"
 
+# ===========================================================================================================
 FROM alpine:3.18.3
 
 MAINTAINER Orkes Inc <builds@orkes.io>
@@ -54,7 +57,7 @@ COPY docker/config/nginx.conf /etc/nginx/http.d/default.conf
 # Startup script(s)
 COPY docker/config/startup.sh /app/startup.sh
 COPY docker/config/config.properties /app/config/config.properties
-COPY server/src/main/resources/banner.txt /app/config/banner.txt
+#COPY server/src/main/resources/banner.txt /app/config/banner.txt
 
 # JAR files
 COPY --from=builder conductor-community/server/build/libs/orkes-conductor-server-boot.jar /app/libs/server.jar
