@@ -23,7 +23,7 @@ WORKDIR conductor-community
 RUN ./gradlew clean build -x test
 
 WORKDIR /
-RUN git clone https://github.com/Netflix/conductor
+RUN git clone https://github.com/Netflix/conductor -b v3.15.0 --depth=1
 WORKDIR conductor/ui
 RUN yarn config set network-timeout 600000 -g
 RUN yarn install && yarn build
@@ -55,7 +55,7 @@ COPY docker/config/startup.sh /app/startup.sh
 COPY docker/config/config.properties /app/config/config.properties
 COPY docker/config/redis.conf /app/config/redis.conf
 COPY docker/config/start_all.sh /app/start_all.sh
-COPY server/src/main/resources/banner.txt /app/config/banner.txt
+#COPY server/src/main/resources/banner.txt /app/config/banner.txt
 
 # JAR files
 COPY --from=builder conductor-community/server/build/libs/orkes-conductor-server-boot.jar /app/libs/server.jar

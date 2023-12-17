@@ -1,0 +1,19 @@
+---
+version: '3.8'
+
+services:
+  server:
+    image: docker.calix.com:8083/workflow2_conductor_ms:v3.15.0-calx1
+    build:
+      context: ../
+      dockerfile: docker/DockerfileServer
+      tags:
+        - "docker.calix.com:8083/workflow2_conductor_ms:v3.15.0-calx1"
+    volumes:
+      - ../server/src/main/resources/application-local.properties:/app/config/config.properties
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
+    ports:
+      - "9090:8080"
+      - "6000:5000"
+    network_mode: host
