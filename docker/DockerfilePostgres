@@ -1,0 +1,75 @@
+#
+# conductor:server - Combined Netflix conductor server & UI
+#
+# ===========================================================================================================
+# 0. Builder stage
+# ===========================================================================================================
+FROM alpine:3.18 AS builder
+
+MAINTAINER Orkes Inc <builds@orkes.io>
+
+# ===========================================================================================================
+# 0. Build Conductor Server UI
+# ===========================================================================================================
+
+
+# Install dependencies
+RUN apk add openjdk17
+RUN apk add git
+RUN apk add --update nodejs npm yarn
+
+COPY . /conductor-community
+WORKDIR conductor-community
+RUN ./gradlew clean build -x test
+
+WORKDIR /
+RUN git clone https://github.com/Netflix/conductor
+WORKDIR conductor/ui
+RUN yarn config set network-timeout 600000 -g
+RUN yarn install && yarn build
+RUN ls -ltr
+RUN echo "Done building UI"
+
+FROM alpine:3.18.3
+MAINTAINER Orkes Inc <builds@orkes.io>
+
+# Install software required to run conductor stack
+RUN apk add nginx
+RUN apk add coreutils
+RUN apk add openjdk17
+RUN apk add redis
+RUN apk add postgresql14
+
+# Make app folders
+RUN mkdir -p /app/config /app/logs /app/libs /app/info
+
+# Add UI
+# Make sure to run build-ui.sh script before running the docker build to pull and build the UI
+WORKDIR /usr/share/nginx/html
+RUN rm -rf ./*
+COPY --from=builder /conductor/ui/build .
+COPY docker/config/nginx.conf /etc/nginx/http.d/default.conf
+
+# Startup script(s)
+COPY docker/config/startup.sh /app/startup.sh
+COPY docker/config/config-postgres.properties /app/config/config.properties
+COPY docker/config/redis.conf /app/config/redis.conf
+COPY docker/config/start_all.sh /app/start_all.sh
+COPY server/src/main/resources/banner.txt /app/config/banner.txt
+
+# JAR files
+COPY --from=builder conductor-community/server/build/libs/orkes-conductor-server-boot.jar /app/libs/server.jar
+
+RUN chmod +x /app/startup.sh
+RUN touch /app/logs/server.log
+
+# setup postgres
+RUN mkdir /run/postgresql
+RUN chown postgres:postgres /run/postgresql/
+
+HEALTHCHECK --interval=60s --timeout=30s --retries=10 CMD curl -I -XGET http://localhost:8080/health || exit 1
+EXPOSE 5000 8080
+
+USER root
+CMD ["/app/start_all.sh"]
+ENTRYPOINT ["/bin/sh"]

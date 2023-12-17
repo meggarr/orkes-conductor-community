@@ -36,8 +36,6 @@ import com.netflix.conductor.core.utils.QueueUtils;
 import com.netflix.conductor.dao.MetadataDAO;
 import com.netflix.conductor.dao.QueueDAO;
 import com.netflix.conductor.model.TaskModel;
-import com.netflix.conductor.model.WorkflowModel;
-import com.netflix.conductor.redis.dao.RedisExecutionDAO;
 import com.netflix.conductor.service.ExecutionLockService;
 
 import io.orkes.conductor.id.TimeBasedUUIDGenerator;
@@ -55,9 +53,9 @@ public class OrkesWorkflowExecutor extends WorkflowExecutor {
 
     private final QueueDAO queueDAO;
 
-    private final ExecutionDAOFacade orkesExecutionDAOFacade;
-    private final SystemTaskRegistry systemTaskRegistry;
-    private final RedisExecutionDAO executionDAO;
+    // private final ExecutionDAOFacade orkesExecutionDAOFacade;
+    // private final SystemTaskRegistry systemTaskRegistry;
+    // private final RedisExecutionDAO executionDAO;
 
     public OrkesWorkflowExecutor(
             DeciderService deciderService,
@@ -72,7 +70,7 @@ public class OrkesWorkflowExecutor extends WorkflowExecutor {
             @Lazy SystemTaskRegistry systemTaskRegistry,
             ParametersUtils parametersUtils,
             IDGenerator idGenerator,
-            RedisExecutionDAO executionDAO,
+            // RedisExecutionDAO executionDAO,
             ApplicationEventPublisher applicationEventPublisher) {
         super(
                 deciderService,
@@ -90,25 +88,25 @@ public class OrkesWorkflowExecutor extends WorkflowExecutor {
                 applicationEventPublisher);
 
         this.queueDAO = queueDAO;
-        this.orkesExecutionDAOFacade = executionDAOFacade;
-        this.systemTaskRegistry = systemTaskRegistry;
-        this.executionDAO = executionDAO;
+        // this.orkesExecutionDAOFacade = executionDAOFacade;
+        // this.systemTaskRegistry = systemTaskRegistry;
+        // this.executionDAO = executionDAO;
         log.info("OrkesWorkflowExecutor initialized");
     }
 
     @Override
     public void retry(String workflowId, boolean resumeSubworkflowTasks) {
-        WorkflowModel workflowModel = orkesExecutionDAOFacade.getWorkflowModel(workflowId, true);
-        executionDAO.restoreWorkflow(workflowModel);
+        // WorkflowModel workflowModel = orkesExecutionDAOFacade.getWorkflowModel(workflowId, true);
+        // executionDAO.restoreWorkflow(workflowModel);
         super.retry(workflowId, resumeSubworkflowTasks);
         queueDAO.setUnackTimeout(DECIDER_QUEUE, workflowId, 0);
     }
 
     @Override
     public String rerun(RerunWorkflowRequest request) {
-        WorkflowModel workflowModel =
-                orkesExecutionDAOFacade.getWorkflowModel(request.getReRunFromWorkflowId(), true);
-        executionDAO.restoreWorkflow(workflowModel);
+        // WorkflowModel workflowModel =
+        //         orkesExecutionDAOFacade.getWorkflowModel(request.getReRunFromWorkflowId(), true);
+        // executionDAO.restoreWorkflow(workflowModel);
         return super.rerun(request);
     }
 
