@@ -28,6 +28,8 @@
         </encoder>
     </appender>
 
+    <logger name="io.orkes.conductor" level="debug"/>
+
     <root level="info">
         <appender-ref ref="Console" />
         <appender-ref ref="FileAppender" />
