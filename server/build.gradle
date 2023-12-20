@@ -25,7 +25,7 @@ dependencies {
     implementation "com.netflix.conductor:conductor-metrics:${versions.revConductor}"
 
     implementation "io.orkes.queues:orkes-conductor-queues:${versions.revOrkesQueues}"
-    implementation project(":orkes-conductor-archive")
+    //implementation project(":orkes-conductor-archive")
     //implementation project(":orkes-conductor-persistence")
 
     implementation "io.orkes.conductor:orkes-conductor-common-protos:${versions.revOrkesProtos}"
@@ -50,9 +50,12 @@ dependencies {
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-    runtimeOnly 'com.netflix.spectator:spectator-reg-micrometer'
+    //Metrics
     implementation "io.micrometer:micrometer-registry-prometheus:${versions.revMicrometer}"
     implementation "io.micrometer:micrometer-core:${versions.revMicrometer}"
+    implementation "com.netflix.spectator:spectator-reg-micrometer:${versions.revSpectator}"
+    implementation "com.netflix.spectator:spectator-reg-metrics3:${versions.revSpectator}"
+    implementation "com.netflix.spectator:spectator-api:${versions.revSpectator}"
 
     implementation "com.jayway.jsonpath:json-path:${versions.revJsonPath}"
 

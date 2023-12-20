@@ -1,5 +1,5 @@
 rootProject.name = 'orkes-conductor'
-include 'archive'
+//include 'archive'
 //include 'persistence'
 include 'server'
 include 'test-harness'
